@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jo2024-backend/jo2024-backend.iml" filepath="$PROJECT_DIR$/jo2024-backend/jo2024-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/studi-jo2024-back.iml" filepath="$PROJECT_DIR$/.idea/studi-jo2024-back.iml" />
+    </modules>
+  </component>
+</project>
