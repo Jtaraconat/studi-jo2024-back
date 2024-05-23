@@ -1,13 +1,13 @@
 package com.jtaraconat.jo2024backend.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,43 +20,59 @@ public class Ticket {
 
         @Id
         @GeneratedValue
-        private long id;
-        private String event;
-        private String description;
-        private long price;
+        private int ticketId;
+        private String eventName;
+        private String eventLocation;
+        private String time;
+        private int price;
         private String image;
         private String sport;
         private String city;
+        private String ticketType;
+        private boolean isActive = true;
+
+        @JsonIgnore
+        @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+        private Set<CartItem> cartItems;
+
 
     public long getId() {
-        return id;
+        return ticketId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setId(int id) {
+        this.ticketId = id;
     }
 
-    public String getEvent() {
-        return event;
+    public String getEventName() {
+        return eventName;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getEventLocation() {
+        return eventLocation;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
     }
 
-    public long getPrice() {
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -82,5 +98,37 @@ public class Ticket {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(String ticketType) {
+        this.ticketType = ticketType;
+    }
+
+    public int getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public Set<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(Set<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean active) {
+        isActive = active;
     }
 }

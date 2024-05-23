@@ -1,9 +1,7 @@
 package com.jtaraconat.jo2024backend.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -19,17 +19,22 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-
-
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue
-    private int id;
+    private int userId;
     private String firstname;
     private String lastname;
-    private String email;
+    public String email;
     private String password;
+    private Role role;
+    private UUID uniqueUserKey = UUID.randomUUID();
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Cart> carts;
 
 
     @Override
@@ -48,21 +53,81 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public UUID getUniqueUserKey() {
+        return uniqueUserKey;
+    }
+
+    public void setUniqueUserKey(UUID uniqueUserKey) {
+        this.uniqueUserKey = uniqueUserKey;
     }
 }

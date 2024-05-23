@@ -6,8 +6,6 @@ import com.jtaraconat.jo2024backend.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class UserController {
@@ -20,10 +18,6 @@ public class UserController {
         return userRepository.save(newUser);
     }
 
-    @GetMapping("/api/users")
-    List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     @GetMapping("/api/user/{id}")
     User getUserById(@PathVariable Integer id) {
