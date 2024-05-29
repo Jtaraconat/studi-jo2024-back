@@ -27,7 +27,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems;
 
-    private String uniqueOrderKey;
+
 
 
     public int getOrderId() {
@@ -63,11 +63,5 @@ public class Order {
         this.user = user;
     }
 
-    public String getUniqueOrderKey() {
-        return uniqueOrderKey;
-    }
 
-    public void setUniqueOrderKey(String uniqueOrderKey) {
-        this.uniqueOrderKey = uniqueOrderKey;
-    }
 }

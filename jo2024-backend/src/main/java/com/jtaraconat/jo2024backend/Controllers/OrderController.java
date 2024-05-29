@@ -1,12 +1,15 @@
 package com.jtaraconat.jo2024backend.Controllers;
 
+import com.google.zxing.WriterException;
 import com.jtaraconat.jo2024backend.DTO.OrderItemDTO;
 import com.jtaraconat.jo2024backend.Models.Order;
+import com.jtaraconat.jo2024backend.Repositories.OrderItemRepository;
 import com.jtaraconat.jo2024backend.Services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,6 +18,10 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
 
     @PostMapping("/api/order/create/{userId}")
     public ResponseEntity<Order> createOrder(@PathVariable int userId) {
@@ -35,4 +42,15 @@ public class OrderController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping("/api/order/qrcode/{orderItemId}")
+    public ResponseEntity<String> getQRCodeForOrderItem(@PathVariable int orderItemId) {
+        try {
+            String qrCode = orderService.getQRCodeForOrderItem(orderItemId);
+            return ResponseEntity.ok(qrCode);
+        } catch (WriterException | IOException e) {
+            return ResponseEntity.status(500).body("Error generating QR code");
+        }
+    }
+
 }

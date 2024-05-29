@@ -57,8 +57,15 @@ public class CartService {
                         cartItem.getCartItemId(),
                         cartItem.getTicket().getTicketId(),
                         cartItem.getTicket().getEventName(),
+                        cartItem.getTicket().getEventLocation(),
+                        cartItem.getTicket().getTime(),
+                        cartItem.getTicket().getDay(),
+                        cartItem.getTicket().getSport(),
+                        cartItem.getTicket().getCity(),
+                        cartItem.getTicket().getTicketType(),
                         cartItem.getTicket().getPrice(),
-                        cartItem.getQuantity()
+                        cartItem.getQuantity(),
+                        cartItem.getTicket().getImage()
                 ))
                 .collect(Collectors.toList());
     }

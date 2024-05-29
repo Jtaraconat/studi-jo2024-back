@@ -2,12 +2,14 @@ package com.jtaraconat.jo2024backend.Controllers;
 
 
 import com.jtaraconat.jo2024backend.Models.Role;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String token;
@@ -16,16 +18,6 @@ public class AuthenticationResponse {
     private String lastname;
     private Role role;
 
-    public AuthenticationResponse(String token, int userId, String firstname, String lastname, Role role) {
-        this.token = token;
-        this.userId = userId;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.role = role;
-    }
-
-    public AuthenticationResponse(String token) {
-    }
 
     public String getToken() {
         return token;
@@ -59,6 +51,7 @@ public class AuthenticationResponse {
         this.lastname = lastname;
     }
 
+
     public Role getRole() {
         return role;
     }
@@ -66,4 +59,7 @@ public class AuthenticationResponse {
     public void setRole(Role role) {
         this.role = role;
     }
+
 }
+
+

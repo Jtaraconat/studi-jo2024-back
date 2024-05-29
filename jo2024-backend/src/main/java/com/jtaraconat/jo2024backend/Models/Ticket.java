@@ -24,6 +24,7 @@ public class Ticket {
         private String eventName;
         private String eventLocation;
         private String time;
+        private String day;
         private int price;
         private String image;
         private String sport;
@@ -58,6 +59,14 @@ public class Ticket {
 
     public void setEventLocation(String eventLocation) {
         this.eventLocation = eventLocation;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getTime() {

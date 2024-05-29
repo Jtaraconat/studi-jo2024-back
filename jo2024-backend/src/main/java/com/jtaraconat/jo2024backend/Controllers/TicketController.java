@@ -44,6 +44,7 @@ public class TicketController {
                     ticket.setEventName(newTicket.getEventName());
                     ticket.setEventLocation(newTicket.getEventLocation());
                     ticket.setTime(newTicket.getTime());
+                    ticket.setDay(newTicket.getDay());
                     ticket.setPrice(newTicket.getPrice());
                     ticket.setImage(newTicket.getImage());
                     ticket.setSport(newTicket.getSport());

@@ -1,5 +1,6 @@
 package com.jtaraconat.jo2024backend.Services;
 
+import com.google.zxing.WriterException;
 import com.jtaraconat.jo2024backend.DTO.OrderItemDTO;
 import com.jtaraconat.jo2024backend.Exceptions.CartNotFoundException;
 import com.jtaraconat.jo2024backend.Models.*;
@@ -11,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,9 +33,12 @@ public class OrderService {
     @Autowired
     private CartItemRepository cartItemRepository;
 
+    @Autowired
+    private QRCodeGenerator qrCodeGenerator;
+
 
     @Transactional
-    public Order createOrderFromCart(int userId) {
+    public Order createOrderFromCart(int userId) throws SQLException, IOException, WriterException {
         Cart cart = cartRepository.findByUserUserId(userId);
         if(cart == null) {
             throw  new CartNotFoundException(userId);
@@ -50,7 +56,8 @@ public class OrderService {
         order.setUser(cart.getUser());
         order = orderRepository.save(order);
 
-        String uniqueOrderKey;
+        String qrCode = "";
+
 
         for (CartItem cartItem : cartItems) {
             OrderItem orderItem = new OrderItem();
@@ -58,10 +65,9 @@ public class OrderService {
             orderItem.setTicket(cartItem.getTicket());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setPrice(cartItem.getTicket().getPrice());
+            orderItem.setSecurityKey(orderItem.getUniqueOrderItemKey().toString() + "-" + userUUID.toString());
+            orderItem.setQRCode(QRCodeGenerator.generateQRCodeBase64(orderItem.getSecurityKey(), 300, 300));
             orderItemRepository.save(orderItem);
-            UUID itemOrderUUID = orderItem.getUniqueOrderItemKey();
-            uniqueOrderKey = (userUUID.toString()) + ("-") + (itemOrderUUID.toString());
-            order.setUniqueOrderKey(uniqueOrderKey);
         }
         return order;
     }
@@ -74,12 +80,18 @@ public class OrderService {
                         orderItem.getOrder().getOrderId(),
                         orderItem.getTicket().getTicketId(),
                         orderItem.getPrice(),
-                        orderItem.getQuantity()
+                        orderItem.getQuantity(),
+                        orderItem.getTicket().isActive()
                 ))
                 .collect(Collectors.toList());
     }
 
+    public String getQRCodeForOrderItem(int orderItemId) throws WriterException, IOException {
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new RuntimeException("OrderItem not found"));
 
+        return QRCodeGenerator.generateQRCodeBase64(orderItem.getQRCode(), 200, 200);
+    }
 }
 
 

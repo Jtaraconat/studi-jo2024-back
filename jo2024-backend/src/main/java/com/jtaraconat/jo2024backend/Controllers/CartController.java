@@ -63,8 +63,6 @@ public class CartController {
         return "Ticket item avec l'id: " + cartItemId + " a été supprimé";
     }
 
-
-
 }
 
 

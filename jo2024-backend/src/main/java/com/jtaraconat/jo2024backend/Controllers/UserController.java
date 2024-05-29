@@ -18,7 +18,6 @@ public class UserController {
         return userRepository.save(newUser);
     }
 
-
     @GetMapping("/api/user/{id}")
     User getUserById(@PathVariable Integer id) {
         return userRepository.findById(id)

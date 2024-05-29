@@ -6,14 +6,17 @@ public class OrderItemDTO {
     private int orderId;
     private int ticketId;
     private int price;
-    private int quantity;
+    private int quantity = 1;
+    private boolean isActive;
 
-    public OrderItemDTO(int orderItemId, int orderId, int ticketId, int price, int quantity) {
+    public OrderItemDTO(int orderItemId, int orderId, int ticketId, int price, int quantity, boolean isActive) {
         this.orderItemId = orderItemId;
         this.orderId = orderId;
         this.ticketId = ticketId;
         this.price = price;
         this.quantity = quantity;
+        this.isActive = isActive;
+
     }
 
     public int getOrderItemId() {
@@ -55,4 +58,13 @@ public class OrderItemDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
 }

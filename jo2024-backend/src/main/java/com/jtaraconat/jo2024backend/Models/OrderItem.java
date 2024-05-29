@@ -27,11 +27,11 @@ public class OrderItem {
     @JoinColumn(name = "ticketId")
     private Ticket ticket;
 
-    private int quantity;
-
+    private int quantity = 1;
     private int price;
-
     private UUID uniqueOrderItemKey = UUID.randomUUID();
+    private String securityKey;
+    private String QRCode;
 
     public int getOrderItemId() {
         return orderItemId;
@@ -79,5 +79,21 @@ public class OrderItem {
 
     public void setUniqueOrderItemKey(UUID uniqueOrderItemKey) {
         this.uniqueOrderItemKey = uniqueOrderItemKey;
+    }
+
+    public String getSecurityKey() {
+        return securityKey;
+    }
+
+    public void setSecurityKey(String securityKey) {
+        this.securityKey = securityKey;
+    }
+
+    public String getQRCode() {
+        return QRCode;
+    }
+
+    public void setQRCode(String QRCode) {
+        this.QRCode = QRCode;
     }
 }
