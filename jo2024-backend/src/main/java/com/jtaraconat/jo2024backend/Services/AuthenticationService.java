@@ -3,12 +3,14 @@ package com.jtaraconat.jo2024backend.Services;
 import com.jtaraconat.jo2024backend.Controllers.AuthenticationRequest;
 import com.jtaraconat.jo2024backend.Controllers.AuthenticationResponse;
 import com.jtaraconat.jo2024backend.Controllers.RegisterRequest;
+import com.jtaraconat.jo2024backend.Models.CustomUserDetails;
 import com.jtaraconat.jo2024backend.Models.Role;
 import com.jtaraconat.jo2024backend.Models.User;
 import com.jtaraconat.jo2024backend.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public AuthenticationResponse register(RegisterRequest request) {
 
@@ -32,14 +35,9 @@ public class AuthenticationService {
                     .build();
             repository.save(user);
 
-            var jwtToken = jwtService.generateToken(user);
-            return AuthenticationResponse.builder()
-                    .token(jwtToken)
-                    .userId(user.getUserId())
-                    .firstname(user.getFirstname())
-                    .lastname(user.getLastname())
-                    .role(user.getRole())
-                    .build();
+        var  userDetails = customUserDetailsService.loadUserByUsername(user.getEmail());
+        var jwtToken = jwtService.generateToken(userDetails);
+        return createAuthenticationResponse(userDetails, jwtToken);
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -51,13 +49,21 @@ public class AuthenticationService {
         );
         var user  = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        var userDetails = customUserDetailsService.loadUserByUsername(request.getEmail());
+        System.out.println(userDetails);
+
+        var jwtToken = jwtService.generateToken(userDetails);
+        return createAuthenticationResponse(userDetails, jwtToken);
+    }
+
+    private AuthenticationResponse createAuthenticationResponse(UserDetails userDetails, String jwtToken) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .userId(user.getUserId())
-                .firstname(user.getFirstname())
-                .lastname(user.getLastname())
-                .role(user.getRole())
+                .userId(customUserDetails.getUserId())
+                .firstname(customUserDetails.getFirstname())
+                .lastname(customUserDetails.getLastname())
+                .role(customUserDetails.getRole())
                 .build();
     }
 }

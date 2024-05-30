@@ -80,7 +80,6 @@ public class CartService {
 
         Cart cart = cartRepository.findByUserUserId(userId);
         if(cart == null){
-            //create cart if doesn't exist
             cart = new Cart();
             cart.setUser(user);
             cart = cartRepository.save(cart);
@@ -91,7 +90,6 @@ public class CartService {
                 .orElseThrow(()-> new TicketNotFoundException(ticketId));
 
 
-        //check if cart already have this ticket
         CartItem existingCartItem = cartItemRepository.findByCartCartIdAndTicketTicketId(cart.getCartId(), ticketId);
         if (existingCartItem != null) {
             existingCartItem.setQuantity(quantity);

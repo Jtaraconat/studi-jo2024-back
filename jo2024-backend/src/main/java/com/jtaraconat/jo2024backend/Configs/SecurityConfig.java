@@ -1,6 +1,5 @@
 package com.jtaraconat.jo2024backend.Configs;
 
-import com.jtaraconat.jo2024backend.Models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://studi-jo2024.web.app")
 public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -37,17 +36,18 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and()
-                .csrf().disable() // Disable CSRF
+                .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers(HttpMethod.DELETE,"/api/ticket/*").hasRole(Role.ADMIN.toString())
-                .requestMatchers(HttpMethod.POST,"/api/ticket/*").hasRole(Role.ADMIN.toString())
-                .requestMatchers(HttpMethod.PUT,"/api/ticket/*").hasRole(Role.ADMIN.toString())
-                .requestMatchers(WHITE_LIST).permitAll() // Allow access to /api/login without authentication
+                .requestMatchers(WHITE_LIST).permitAll()
+                .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/ticket").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/ticket/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/ticket/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build(); // Builds and returns the SecurityFilterChain.
+        return http.build();
     }
 
 

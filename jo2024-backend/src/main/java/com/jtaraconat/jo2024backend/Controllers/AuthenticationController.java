@@ -3,6 +3,8 @@ package com.jtaraconat.jo2024backend.Controllers;
 import com.jtaraconat.jo2024backend.Models.User;
 import com.jtaraconat.jo2024backend.Services.AuthenticationService;
 import com.jtaraconat.jo2024backend.Services.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"https://studi-jo2024.web.app"})
+@Tag(name = "Authentication API", description = "API for managing authentication")
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -30,6 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/login")
+    @Operation(method = "POST", summary = "Login a user", description = "Allows a user to login")
     public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(
@@ -54,13 +58,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/api/register")
+    @Operation(method = "POST", summary = "Register a new user", description = "Allows a user to register an account")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         AuthenticationResponse response = authenticationService.register(request);
         return ResponseEntity.ok(response);
     }
-
-
-
 
 }
 
